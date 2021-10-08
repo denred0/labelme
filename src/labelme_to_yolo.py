@@ -4,12 +4,7 @@ import json
 
 from tqdm import tqdm
 
-labels_map = {0: 'pig',
-              1: 'ladle',
-              2: 'gates',
-              3: 'person',
-              4: 'red_pants',
-              5: 'blue_pants'}
+labels_map = {0: 'podnos',}
 
 labelme_dir = "labelme_to_yolo/input/"
 darknet_labels = "labelme_to_yolo/output/"
@@ -64,17 +59,17 @@ for image in tqdm(images_list):
             xmax = points[1][0]
             ymax = points[1][1]
 
-            rect_with = int(xmax - xmin)
+            rect_width = int(xmax - xmin)
             rect_height = int(ymax - ymin)
 
-            x_center = int(xmin + rect_with / 2)
+            x_center = int(xmin + rect_width / 2)
             y_center = int(ymin + rect_height / 2)
 
-            rel_x_center = x_center / img_width
-            rel_y_center = y_center / img_height
-            rel_rect_with = rect_with / img_width
-            rel_rect_height = rect_height / img_height
+            rel_x_center = min(max(x_center / img_width , 0), 1)
+            rel_y_center = min(max(y_center / img_height, 0), 1)
+            rel_rect_width = min(max(rect_width / img_width, 0), 1)
+            rel_rect_height = min(max(rect_height / img_height, 0), 1)
 
             with open("{}/{}.txt".format(darknet_labels, image.split(".")[0]), "a") as dl:
                 dl.write(
-                    "{} {} {} {} {}\n".format(label, rel_x_center, rel_y_center, rel_rect_with, rel_rect_height))
+                    "{} {} {} {} {}\n".format(label, rel_x_center, rel_y_center, rel_rect_width, rel_rect_height))
