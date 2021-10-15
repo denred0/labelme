@@ -16,13 +16,14 @@ def get_all_files_in_folder(folder, types):
     return files_grabbed
 
 
-classes_map = {0: "pig", 1: "ladle", 2: "gates", 3: "person", 4: "red_pants", 5: "blue_pants"}
+# classes_map = {0: "pig", 1: "ladle", 2: "gates", 3: "person", 4: "red_pants", 5: "blue_pants"}
+classes_map = {0: "podnos"}
 
 null = None
 
 images = get_all_files_in_folder(Path('../input_yolo'), ['*.jpg'])
 
-for i, img_path in tqdm(enumerate(images)):
+for i, img_path in tqdm(enumerate(images), total=len(images)):
     img = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
     h, w = img.shape[:2]
 
